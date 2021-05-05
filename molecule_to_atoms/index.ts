@@ -66,8 +66,8 @@ function tokenize(formula: string): Token[] {
 
     Also this func returns index where closing brace was occured for that brace
 */
-function getTopLevelBrace(tokens: Token[]): TopLevelBrace {
-    let group: TopLevelBrace = { end: 0, formula: "" };
+function getBracedFormula(tokens: Token[]): TopLevelBrace {
+    let formula: TopLevelBrace = { end: 0, formula: "" };
     let start;
     // For keeping track of how many braced opened in the moment
     let openedBraces = 0;
@@ -76,7 +76,7 @@ function getTopLevelBrace(tokens: Token[]): TopLevelBrace {
         const token = tokens[i];
 
         if (token.type == "LBRACE") {
-            // First opened brace defines start of the top-level-brace
+            // First opened brace defines start of the top-level brace
             if (openedBraces == 0) start = i;
 
             openedBraces++;
@@ -85,15 +85,15 @@ function getTopLevelBrace(tokens: Token[]): TopLevelBrace {
 
             // Last closed brace defines end of the top-level brace
             if (openedBraces == 0) {
-                group.end = i;
+                formula.end = i;
                 break;
             }
         }
     }
 
     // Extracts formula from the brace
-    group.formula = tokens.slice(start + 1, group.end).map(t => t.value).join("");
-    return group;
+    formula.formula = tokens.slice(start + 1, formula.end).map(t => t.value).join("");
+    return formula;
 }
 
 export function parseMolecule(formula): AtomsAmount {
@@ -118,9 +118,9 @@ export function parseMolecule(formula): AtomsAmount {
                 break;
             }
             case "LBRACE": {
-                let { formula: braceFormula, end } = getTopLevelBrace(tokens.slice(i));
+                let { formula: braceFormula, end } = getBracedFormula(tokens.slice(i));
 
-                // Skip this brace because it's already processed
+                // Skipping tokens that will be processed
                 i += end;
                 // Recursevly get atoms amount in this brace
                 let braceAtoms = parseMolecule(braceFormula);
@@ -129,9 +129,9 @@ export function parseMolecule(formula): AtomsAmount {
                 let braceAmount = 1;
 
                 // If the next token is the symbol, we should process it in the next iteration
-                if (nextToken?.type == "SYM") i--;
+                if (nextToken.type == "SYM") i--;
                 // Otherwise, if it's number, set this as the amount
-                if (nextToken?.type == "NUMBER")
+                if (nextToken.type == "NUMBER")
                     braceAmount = parseInt(nextToken.value);
 
                 for (let e in braceAtoms) {
