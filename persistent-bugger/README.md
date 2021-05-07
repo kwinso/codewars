@@ -36,3 +36,25 @@ Example:
 - 3rd number from end is 2, it's hundreed
 - `1234 / 100 % 10` == 2
 > mod 10 to discard 1000's and higher
+
+# Better solution
+Probably, we don't need to store every digit of number, we just need to get every digit.  
+So, we can just get the last digit and truncate the number. 
+```rust
+fn persistence(mut n: u64) -> u64 {
+    if n < 10 {
+        0
+    } else {
+        let mut v = 1u64;
+        
+        while n != 0 {
+            // Get last digit
+            v *= n % 10; 
+            // Remove this digit
+            n /= 10;
+        }
+        
+        persistence(v)+1
+    }
+}
+```
