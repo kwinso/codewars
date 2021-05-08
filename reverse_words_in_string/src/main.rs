@@ -1,6 +1,5 @@
 fn main() {
-    let out = reverse_words("double  spaces ");
-
+    println!("{}", reverse_words("double  spaces "));
 }
 
 fn reverse_words(input: &str) -> String {
