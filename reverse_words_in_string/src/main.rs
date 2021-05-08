@@ -1,5 +1,7 @@
 fn main() {
-    println!("{}", reverse_words("double  spaces "));
+    assert_eq!(reverse_words("double  spaces"), "elbuod  secaps");
+
+    println!("passed");
 }
 
 fn reverse_words(input: &str) -> String {
