@@ -1,14 +1,14 @@
 fn main() {
-    assert_eq!(rot("test", 13), "grfg");
-    assert_eq!(rot("Test", 13), "Grfg");
+    assert_eq!(rot13("test"), "grfg");
+    assert_eq!(rot13("Test"), "Grfg");
     println!("Passed.");
 }
 
-fn rot(message: &str, shift: u8) -> String {
+fn rot13(message: &str) -> String {
     let mut out = String::new();
     for i in message.chars() {
         if i.is_ascii_alphabetic() {
-            let c = i as u8 + shift;
+            let c = i as u8 + 13;
             let lower_digit = if i.is_ascii_uppercase() { 64 } else { 96 };
             let upper_digit = lower_digit + 26;
 
